@@ -1,0 +1,90 @@
+#Build container for Python
+FROM debian:stretch as build
+
+RUN set -x && \
+        apt-get update && \
+        apt-get install python2.7 python-apt python-pip -y ;
+
+RUN set -x && \
+        pip install --upgrade --force-reinstall pip;
+RUN set -x && \
+        pip install virtualenv && pip install  --upgrade --force-reinstall setuptools;
+
+RUN set -x && \
+        pip install appdirs \
+        asn1crypto \
+        Babel \
+        bcrypt \
+        beautifulsoup4 \
+        cached-property \
+        cffi \
+        chardet \
+        cryptography \
+        decorator \
+        defusedxml \
+        docutils \
+        ebaysdk \
+        enum34 \
+        feedparser \
+        funcsigs \
+        greenlet \
+        html2text \
+        html5lib \
+        idna \
+        ipaddress \
+        isodate \
+        Jinja2 \
+        lxml \
+        Mako \
+        MarkupSafe \
+        mock \
+        nameparser \
+        num2words \
+        ofxparse \
+        paramiko \
+        passlib \
+        pbr \
+        phonenumbers \
+        Pillow \
+        psutil \
+        py-Asterisk \
+        pyasn1 \
+        pycompat \
+        pynacl \
+        pycparser \
+        pycrypto \
+        pydot \
+        pyparsing \
+        pyPdf \
+        PyPDF2 \
+        pyserial \
+        pysftp \
+        Python-Chart \
+        python-dateutil \
+        python-stdnum \
+        pytz \
+        pyusb \
+        PyYAML \
+        py-rs \
+        qrcode \
+        reportlab \
+        psycopg2 \
+        gevent \
+        requests \
+        requests-toolbelt \
+        six \
+        suds-jurko \
+        vatnumber \
+        virtualenv \
+        vobject \
+        Werkzeug \
+        xlrd \
+        XlsxWriter \
+        xlwt \
+        zeep ;
+
+#Odoo final container
+FROM odoo:10
+
+COPY --from=build /usr/local/lib/python2.7/dist-packages /usr/local/lib/python2.7/dist-packages
+COPY --from=build /usr/lib/python2.7/dist-packages /usr/lib/python2.7/dist-packages

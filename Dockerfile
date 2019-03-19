@@ -107,7 +107,7 @@ RUN set -x;\
   && apt-get update \
   && apt-get install -y --no-install-recommends nodejs \
   && npm install -g rtlcss \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
   && rm -rf  /usr/share/doc/*
 
 RUN set -x; \

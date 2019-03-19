@@ -1,5 +1,5 @@
 # DEV Debian packages stage ###########################################################################################
-FROM debian:stretch AS deb-build
+FROM python:3-stretch AS deb-build
 
 RUN set -x; \
     apt-get update \
@@ -28,12 +28,9 @@ COPY libraries.txt /libraries.txt
 
 ONBUILD RUN tar uvf libraries.tar $(<libraries.txt)
 
-# INT Debian to make .tar with proper libraries #######################################################################
-FROM deb-build AS deb-intermediate
-
 # DEV Python build PIP modules ########################################################################################
 
-FROM python:3-stretch AS py-build
+FROM deb-build AS py-build
 
 RUN set -x; \
     apt-get update \
@@ -69,7 +66,7 @@ FROM python:3-slim
 
 COPY --from=py-build /pyhton-libs /usr/local
 
-COPY --from=deb-intermediate /libraries.tar /tmp/libraries.tar
+COPY --from=py-build /libraries.tar /tmp/libraries.tar
 
 RUN set -x; \
 

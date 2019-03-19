@@ -93,7 +93,7 @@ RUN set -x; \
 
     tar -xvf /tmp/libraries.tar -C / \
     && adduser --system --quiet --shell=/bin/bash --home=/opt/odoo --gecos 'ODOO' --group odoo \
-    && chown -R odoo:odoo /opt/odoo /var/log/odoo
+    && chown -R odoo:odoo /opt/odoo /var/log/odoo \
     && rm -rf /tmp/libraries.tar
 
 RUN set -x;\

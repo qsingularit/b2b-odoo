@@ -1,0 +1,17 @@
+version: '3'
+services:
+  web:
+    image: odoo:debian-slim
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    volumes:
+      - /home/support/odoo:/etc/odoo/
+      - /home/support/odoo:/mnt
+  db:
+    image: postgres:10
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo

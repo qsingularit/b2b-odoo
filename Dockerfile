@@ -5,6 +5,7 @@ RUN set -x; \
     apt-get update \
     && apt-get install -y --no-install-recommends git \
     curl \
+    gpg \
     libsasl2-dev \
     python3-dev \
     libldap2-dev \
@@ -17,16 +18,35 @@ RUN set -x; \
     libssl1.0-dev \
     xz-utils dirmngr \
     python3-renderpm \
+    xz-utils \
 
     && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb \
     && echo '7e35a63f9db14f93ec7feeb0fce76b30c08f2057 wkhtmltox.deb' | sha1sum -c - \
     && dpkg --force-depends -i wkhtmltox.deb\
-    && apt-get -y install -f --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/* wkhtmltox.deb
+    && apt-get update \
+    && apt-get -y install -f --no-install-recommends
+
+RUN set -x; \
+    echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' > etc/apt/sources.list.d/pgdg.list \
+    && export GNUPGHOME="$(mktemp -d)" \
+    && repokey='B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8' \
+    && gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "${repokey}" \
+    && gpg --armor --export "${repokey}" | apt-key add - \
+    && gpgconf --kill all \
+    && rm -rf "$GNUPGHOME" \
+    && apt-get update  \
+    && apt-get install -y postgresql-client
+
+# Install Odoo
+ENV ODOO_VERSION 12.0
+RUN set -x; \
+    mkdir -p /opt/odoo/odoo-server /var/log/odoo /opt/odoo/custom/addons /opt/odoo/b2b/addons\
+
+    && git clone --depth 1 --branch ${ODOO_VERSION} https://www.github.com/odoo/odoo /opt/odoo/odoo-server
 
 COPY libraries.txt /libraries.txt
 
-ONBUILD RUN tar uvf libraries.tar $(<libraries.txt)
+ONBUILD RUN tar -cvf libraries.tar $(cat libraries.txt)
 
 # DEV Python build PIP modules ########################################################################################
 
@@ -45,7 +65,6 @@ RUN set -x; \
     fonts-noto-cjk \
     gnupg \
     libssl1.0-dev \
-    xz-utils \
     dirmngr \
     python3-renderpm
 
@@ -53,7 +72,7 @@ RUN mkdir /pyhton-libs
 WORKDIR /pyhton-libs
 
 RUN set -x; \
-  curl -sO https://raw.githubusercontent.com/odoo/odoo/12.0/requirements.txt
+    curl -sO https://raw.githubusercontent.com/odoo/odoo/12.0/requirements.txt
 
 RUN set -x; \
     printf 'gdata\n python3-openid\n paramiko\n psycogreen\n pysftp\n pyyaml\n simplejson\n unittest2\n nameparser\n' >> requirements.txt \
@@ -68,22 +87,14 @@ COPY --from=py-build /pyhton-libs /usr/local
 
 COPY --from=py-build /libraries.tar /tmp/libraries.tar
 
-RUN set -x; \
-
-    tar xvf /tmp/libraries.tar -C /
+COPY --from=py-build /opt/odoo /opt/odoo
 
 RUN set -x; \
-  echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' > etc/apt/sources.list.d/pgdg.list \
-  && apt-get update  \
-  && apt-get install -y gpg \
-  && export GNUPGHOME="$(mktemp -d)" \
-  && repokey='B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8' \
-  && gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "${repokey}" \
-  && gpg --armor --export "${repokey}" | apt-key add - \
-  && gpgconf --kill all \
-  && rm -rf "$GNUPGHOME" \
-  && apt-get install -y --no-install-recommends  --allow-unauthenticated postgresql-client \
-  && rm -rf /var/lib/apt/lists/*
+
+    tar -xvf /tmp/libraries.tar -C / \
+    && adduser --system --quiet --shell=/bin/bash --home=/opt/odoo --gecos 'ODOO' --group odoo \
+    && chown -R odoo:odoo /opt/odoo /var/log/odoo
+    && rm -rf /tmp/libraries.tar
 
 RUN set -x;\
   echo "deb http://deb.nodesource.com/node_8.x stretch main" > /etc/apt/sources.list.d/nodesource.list \
@@ -94,20 +105,13 @@ RUN set -x;\
   && gpgconf --kill all \
   && rm -rf "$GNUPGHOME" \
   && apt-get update \
-  && apt-get install -y --no-install-recommends git nodejs \
+  && apt-get install -y --no-install-recommends nodejs \
   && npm install -g rtlcss \
   && rm -rf /var/lib/apt/lists/*
+  && rm -rf  /usr/share/doc/*
 
 RUN set -x; \
     pip3 install tz;
-
-# Install Odoo
-ENV ODOO_VERSION 12.0
-RUN set -x; \
-    mkdir -p /opt/odoo/odoo-server /var/log/odoo /opt/odoo/custom/addons /opt/odoo/b2b/addons\
-    && adduser --system --quiet --shell=/bin/bash --home=/opt/odoo --gecos 'ODOO' --group odoo \
-    && chown -R odoo:odoo /opt/odoo /var/log/odoo \
-    && git clone --depth 1 --branch ${ODOO_VERSION} https://www.github.com/odoo/odoo /opt/odoo/odoo-server
 
 # Copy entrypoint script and Odoo configuration file
 COPY ./entrypoint.sh /
@@ -123,7 +127,7 @@ EXPOSE 8069 8071
 ENV ODOO_RC /etc/odoo/odoo.conf
 
 # Set default user when running the container
-USER root
+USER odoo
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/opt/odoo/odoo-server/odoo-bin", "--config=/etc/odoo/odoo.conf", "--logfile=/var/log/odoo/odoo.log"]

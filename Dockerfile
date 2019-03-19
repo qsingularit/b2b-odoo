@@ -15,7 +15,6 @@ RUN set -x; \
     fonts-noto-cjk \
     gnupg \
     libssl1.0-dev \
-    node-less \
     xz-utils dirmngr \
     python3-renderpm \
 
@@ -35,6 +34,23 @@ FROM deb-build AS deb-intermediate
 # DEV Python build PIP modules ########################################################################################
 
 FROM python:3-stretch AS py-build
+
+RUN set -x; \
+    apt-get update \
+    && apt-get install -y --no-install-recommends git \
+    curl \
+    libsasl2-dev \
+    python3-dev \
+    libldap2-dev \
+    build-essential \
+    autoconf \
+    ca-certificates \
+    fonts-noto-cjk \
+    gnupg \
+    libssl1.0-dev \
+    xz-utils \
+    dirmngr \
+    python3-renderpm
 
 RUN mkdir /pyhton-libs
 WORKDIR /pyhton-libs

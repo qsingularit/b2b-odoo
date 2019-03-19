@@ -26,7 +26,7 @@ RUN set -x; \
 
 COPY libraries.txt /libraries.txt
 
-ONBUILD RUN tar uvf libraries.tar -T libraries.txt
+ONBUILD RUN tar uvf libraries.tar $(<libraries.txt)
 
 # INT Debian to make .tar with proper libraries #######################################################################
 FROM deb-build AS deb-intermediate

@@ -59,7 +59,7 @@ RUN set -x; \
   curl -sO https://raw.githubusercontent.com/odoo/odoo/12.0/requirements.txt
 
 RUN set -x; \
-    printf 'gdata\n python3-openid\n paramiko\n psycogreen\n pysftp\n pyyaml\n simplejson\n unittest2\n nameparser\n xlwt\n' >> requirements.txt \
+    printf 'gdata\n python3-openid\n paramiko\n psycogreen\n pysftp\n pyyaml\n simplejson\n unittest2\n nameparser\n' >> requirements.txt \
     && pip3 install --install-option="--prefix=/pyhton-libs" -r requirements.txt
 
 

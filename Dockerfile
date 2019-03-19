@@ -77,13 +77,14 @@ RUN set -x; \
 
 RUN set -x; \
   echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' > etc/apt/sources.list.d/pgdg.list \
+  && apt-get update  \
+  && apt-install -y gpg \
   && export GNUPGHOME="$(mktemp -d)" \
   && repokey='B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8' \
   && gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "${repokey}" \
   && gpg --armor --export "${repokey}" | apt-key add - \
   && gpgconf --kill all \
   && rm -rf "$GNUPGHOME" \
-  && apt-get update  \
   && apt-get install -y --no-install-recommends postgresql-client \
   && rm -rf /var/lib/apt/lists/*
 

@@ -100,7 +100,7 @@ RUN set -x;\
   && npm install -g rtlcss \
   && rm -rf /var/lib/apt/lists/*
 
-RUN set -x;
+RUN set -x; \
     pip3 install tz;
 
 # Install Odoo

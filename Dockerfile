@@ -97,7 +97,7 @@ RUN set -x;\
   && gpgconf --kill all \
   && rm -rf "$GNUPGHOME" \
   && apt-get update \
-  && apt-get install -y --no-install-recommends nodejs \
+  && apt-get install -y --no-install-recommends git nodejs \
   && npm install -g rtlcss \
   && rm -rf /var/lib/apt/lists/*
 

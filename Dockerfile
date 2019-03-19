@@ -85,7 +85,7 @@ RUN set -x; \
   && gpg --armor --export "${repokey}" | apt-key add - \
   && gpgconf --kill all \
   && rm -rf "$GNUPGHOME" \
-  && apt-get install -y --no-install-recommends postgresql-client \
+  && apt-get install -y --no-install-recommends  --allow-unauthenticated postgresql-client \
   && rm -rf /var/lib/apt/lists/*
 
 RUN set -x;\

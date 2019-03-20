@@ -31,7 +31,7 @@ RUN set -x; \
     libidn11 \
     libldap-common \
     libnettle6  \
-    ibp11-kit0 \
+    libp11-kit0 \
     libsasl2-2 \
     libsasl2-modules-db \
     libtasn1-6 \

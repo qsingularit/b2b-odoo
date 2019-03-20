@@ -118,8 +118,6 @@ COPY --from=py-build /pyhton-libs /usr/local
 
 COPY --from=py-build /libraries.tar /tmp/libraries.tar
 
-COPY --from=py-build /opt/odoo /opt/odoo
-
 RUN set -x; \
 
     tar -xvf /tmp/libraries.tar -C / \

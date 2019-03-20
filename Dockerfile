@@ -19,6 +19,24 @@ RUN set -x; \
     xz-utils dirmngr \
     python3-renderpm \
     xz-utils \
+    libxslt1.1 \
+    libldap-2.4-2 \
+    libopenjp2-7 \
+    libtiff5 \
+    libicu57 \
+    libxml2  \
+    libgmp10 \
+    libgnutls30 \
+    libhogweed4 \
+    libidn11 \
+    libldap-common \
+    libnettle6  \
+    ibp11-kit0 \
+    libsasl2-2 \
+    libsasl2-modules-db \
+    libtasn1-6 \
+    libjpeg62-turbo
+
 
     && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb \
     && echo '7e35a63f9db14f93ec7feeb0fce76b30c08f2057 wkhtmltox.deb' | sha1sum -c - \
@@ -109,7 +127,9 @@ RUN set -x; \
     && mkdir -p /var/log/odoo \
     && chown -R odoo:odoo /opt/odoo /var/log/odoo \
     && rm -rf /tmp/libraries.tar
-
+    && rm -rf /opt/odoo/odoo-server/.git
+    && rm -rf /opt/odoo/odoo-server/doc
+    && rm -rf /var/tmp/*
 
 RUN set -x; \
     pip3 install tz;

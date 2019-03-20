@@ -123,7 +123,7 @@ RUN set -x; \
     tar -xvf /tmp/libraries.tar -C / \
     && adduser --system --quiet --shell=/bin/bash --home=/opt/odoo --gecos 'ODOO' --group odoo \
     && mkdir -p /var/log/odoo \
-    && chown -R odoo:odoo /opt/odoo /var/log/odoo \
+    && chown -R odoo:odoo /opt/odoo /var/log/odoo /etc/odoo/odoo.conf \
     && rm -rf /tmp/libraries.tar \
     && rm -rf /opt/odoo/odoo-server/.git \
     && rm -rf /opt/odoo/odoo-server/doc \
@@ -135,7 +135,6 @@ RUN set -x; \
 # Copy entrypoint script and Odoo configuration file
 COPY ./entrypoint.sh /
 COPY ./odoo.conf /etc/odoo/odoo.conf
-RUN chown odoo /etc/odoo/odoo.conf
 
 VOLUME ["/opt/odoo/custom/addons","/opt/odoo/b2b/addons"]
 

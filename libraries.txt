@@ -11,7 +11,7 @@ usr/lib/x86_64-linux-gnu/libpng16.so.*
 usr/lib/x86_64-linux-gnu/libjpeg.so.*
 usr/lib/x86_64-linux-gnu/libfreetype.so.*
 usr/local/lib/libwkhtmlto*
-use/local/bin/wkhtmlto*
+usr/local/bin/wkhtmlto*
 usr/bin/fc-*
 usr/bin/lzmainfo
 usr/bin/unxz

@@ -126,9 +126,9 @@ RUN set -x; \
     && adduser --system --quiet --shell=/bin/bash --home=/opt/odoo --gecos 'ODOO' --group odoo \
     && mkdir -p /var/log/odoo \
     && chown -R odoo:odoo /opt/odoo /var/log/odoo \
-    && rm -rf /tmp/libraries.tar
-    && rm -rf /opt/odoo/odoo-server/.git
-    && rm -rf /opt/odoo/odoo-server/doc
+    && rm -rf /tmp/libraries.tar \
+    && rm -rf /opt/odoo/odoo-server/.git \
+    && rm -rf /opt/odoo/odoo-server/doc \
     && rm -rf /var/tmp/*
 
 RUN set -x; \

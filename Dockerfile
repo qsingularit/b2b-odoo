@@ -37,6 +37,20 @@ RUN set -x; \
     && apt-get update  \
     && apt-get install -y postgresql-client
 
+RUN set -x;\
+  echo "deb http://deb.nodesource.com/node_8.x stretch main" > /etc/apt/sources.list.d/nodesource.list \
+  && export GNUPGHOME="$(mktemp -d)" \
+  && repokey='9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280' \
+  && gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "${repokey}" \
+  && gpg --armor --export "${repokey}" | apt-key add - \
+  && gpgconf --kill all \
+  && rm -rf "$GNUPGHOME" \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends nodejs \
+  && npm install -g rtlcss \
+  && rm -rf /var/lib/apt/lists/* \
+  && rm -rf  /usr/share/doc/*
+
 # Install Odoo
 ENV ODOO_VERSION 12.0
 RUN set -x; \
@@ -95,19 +109,6 @@ RUN set -x; \
     && chown -R odoo:odoo /opt/odoo /var/log/odoo \
     && rm -rf /tmp/libraries.tar
 
-RUN set -x;\
-  echo "deb http://deb.nodesource.com/node_8.x stretch main" > /etc/apt/sources.list.d/nodesource.list \
-  && export GNUPGHOME="$(mktemp -d)" \
-  && repokey='9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280' \
-  && gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "${repokey}" \
-  && gpg --armor --export "${repokey}" | apt-key add - \
-  && gpgconf --kill all \
-  && rm -rf "$GNUPGHOME" \
-  && apt-get update \
-  && apt-get install -y --no-install-recommends nodejs \
-  && npm install -g rtlcss \
-  && rm -rf /var/lib/apt/lists/* \
-  && rm -rf  /usr/share/doc/*
 
 RUN set -x; \
     pip3 install tz;

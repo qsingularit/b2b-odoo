@@ -78,7 +78,7 @@ usr/lib/x86_64-linux-gnu/sasl2/libsasldb.s*
 usr/lib/x86_64-linux-gnu/libtasn1.so*
 usr/lib/x86_64-linux-gnu/libtiff.so.*
 usr/lib/x86_64-linux-gnu/libopenjp2.so.*
-usr/lib/x86_64-linux-gnu/libldap-*
+usr/lib/x86_64-linux-gnu/libldap*
 usr/lib/x86_64-linux-gnu/liblber-*
 usr/lib/x86_64-linux-gnu/libexslt*
 usr/lib/x86_64-linux-gnu/libxslt.*

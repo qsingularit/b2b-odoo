@@ -54,7 +54,7 @@ RUN set -x;\
 # Install Odoo
 ENV ODOO_VERSION 12.0
 RUN set -x; \
-    mkdir -p /opt/odoo/odoo-server /var/log/odoo /opt/odoo/custom/addons /opt/odoo/b2b/addons \
+    mkdir -p /opt/odoo/odoo-server  /opt/odoo/custom/addons /opt/odoo/b2b/addons \
     && git clone --depth 1 --branch ${ODOO_VERSION} https://www.github.com/odoo/odoo /opt/odoo/odoo-server
 
 COPY libraries.txt /libraries.txt
@@ -106,6 +106,7 @@ RUN set -x; \
 
     tar -xvf /tmp/libraries.tar -C / \
     && adduser --system --quiet --shell=/bin/bash --home=/opt/odoo --gecos 'ODOO' --group odoo \
+    && mkdir -p /var/log/odoo \
     && chown -R odoo:odoo /opt/odoo /var/log/odoo \
     && rm -rf /tmp/libraries.tar
 

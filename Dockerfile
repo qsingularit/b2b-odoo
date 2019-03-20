@@ -40,8 +40,7 @@ RUN set -x; \
 # Install Odoo
 ENV ODOO_VERSION 12.0
 RUN set -x; \
-    mkdir -p /opt/odoo/odoo-server /var/log/odoo /opt/odoo/custom/addons /opt/odoo/b2b/addons\
-
+    mkdir -p /opt/odoo/odoo-server /var/log/odoo /opt/odoo/custom/addons /opt/odoo/b2b/addons \
     && git clone --depth 1 --branch ${ODOO_VERSION} https://www.github.com/odoo/odoo /opt/odoo/odoo-server
 
 COPY libraries.txt /libraries.txt

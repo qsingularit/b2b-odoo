@@ -32,6 +32,13 @@ RUN set -x; \
     && printf 'gdata\n python3-openid\n paramiko\n psycogreen\n pysftp\n pyyaml\n simplejson\n unittest2\n nameparser\n' >> requirements.txt \
     && pip3 install --install-option="--prefix=/pyhton-libs" -r requirements.txt
 
+RUN set -x; \
+    curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb \
+    && echo '7e35a63f9db14f93ec7feeb0fce76b30c08f2057 wkhtmltox.deb' | sha1sum -c - \
+    && dpkg --force-depends -i wkhtmltox.deb\
+    && apt-get update \
+    && apt-get install -y -f --no-install-recommends
+
 
 ################################ FINAL stage ##########################################################################
 FROM python:3-slim
@@ -39,6 +46,10 @@ FROM python:3-slim
 COPY --from=build /pyhton-libs /usr/local
 
 COPY --from=build /opt/odoo /opt/odoo
+
+COPY --from=build /usr/local/lib/libwkhtmltox.* /usr/local/lib/
+
+COPY --from=build /usr/local/bin/wkhtmlto* /usr/local/bin/
 
 RUN set -x; \
     apt-get update \
@@ -53,14 +64,6 @@ RUN set -x; \
     && apt-get update  \
     && apt-get install -y --no-install-recommends postgresql-client \
     && adduser --system --quiet --shell=/bin/bash --home=/opt/odoo --gecos 'ODOO' --group odoo
-
-RUN set -x; \
-    curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb \
-    && echo '7e35a63f9db14f93ec7feeb0fce76b30c08f2057 wkhtmltox.deb' | sha1sum -c - \
-    && dpkg --force-depends -i wkhtmltox.deb\
-    && apt-get update \
-    && apt-get install -y -f --no-install-recommends
-
 
 RUN set -x; \
     echo "deb http://deb.nodesource.com/node_8.x stretch main" > /etc/apt/sources.list.d/nodesource.list \
@@ -103,7 +106,7 @@ EXPOSE 8069 8071
 ENV ODOO_RC /etc/odoo/odoo.conf
 
 # Set default user when running the container
-USER root
+USER odoo
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/opt/odoo/odoo-server/odoo-bin", "--config=/etc/odoo/odoo.conf", "--logfile=/var/log/odoo/odoo.log"]

@@ -59,7 +59,7 @@ RUN set -x; \
     && rm -rf "$GNUPGHOME" \
     && apt-get update  \
     && apt-get install -y --no-install-recommends postgresql-client \
-    && adduser --system --quiet --shell=/bin/bash --home=/opt/odoo --gecos 'ODOO' --group odoo \
+    && adduser --system --quiet --shell=/bin/bash --home=/opt/odoo --gecos 'ODOO' --group odoo
 
 RUN set -x; \
     echo "deb http://deb.nodesource.com/node_8.x stretch main" > /etc/apt/sources.list.d/nodesource.list \
@@ -76,7 +76,7 @@ RUN set -x; \
     && adduser --system --quiet --shell=/bin/bash --home=/opt/odoo --gecos 'ODOO' --group odoo \
     && mkdir -p /var/log/odoo \
     && chown -R odoo:odoo /opt/odoo /var/log/odoo \
-    && apt-get purge gpg dirmngr \
+    && apt-get purge -y gpg dirmngr \
     && apt-get autoclean \
     && rm -rf /opt/odoo/odoo-server/.git \
     && rm -rf /opt/odoo/odoo-server/doc \

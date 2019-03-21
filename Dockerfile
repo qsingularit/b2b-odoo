@@ -88,6 +88,7 @@ RUN set -x; \
 # Copy entrypoint script and Odoo configuration file
 COPY ./entrypoint.sh /
 COPY ./odoo.conf /etc/odoo/odoo.conf
+
 RUN set -x; \
     chown -R odoo:odoo /etc/odoo/odoo.conf \
     && chmod -R 755 /etc/odoo/odoo.conf

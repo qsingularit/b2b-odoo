@@ -1,13 +1,17 @@
 #!/bin/bash
 
+ODOO_RC=/opt/odoo/odoo.conf
+
 set -e
 
 # set the postgres database host, port, user and password according to the environment
 # and pass them as arguments to the odoo process if not present in the config file
-: ${HOST:=${DB_PORT_5432_TCP_ADDR:='db'}}
-: ${PORT:=${DB_PORT_5432_TCP_PORT:=5432}}
-: ${USER:=${DB_ENV_POSTGRES_USER:=${POSTGRES_USER:='odoo'}}}
-: ${PASSWORD:=${DB_ENV_POSTGRES_PASSWORD:=${POSTGRES_PASSWORD:='odoo'}}}
+: ${HOST:='db'}
+: ${PORT:=5432}
+: ${USER:='odoo'}
+: ${PASSWORD:='odoo'}
+: ${LOGFILE:='/var/log/odoo/odoo-server.log'}
+
 
 DB_ARGS=()
 function check_config() {
@@ -22,21 +26,21 @@ check_config "db_host" "$HOST"
 check_config "db_port" "$PORT"
 check_config "db_user" "$USER"
 check_config "db_password" "$PASSWORD"
+check_config "logfile" "$LOGFILE"
+check_config "config" "$ODOO_RC"
 
 case "$1" in
-    -- | odoo)
+    -- | /opt/odoo/odoo-server/odoo-bin)
         shift
-        if [[ "$1" == "scaffold" ]] ; then
-            exec odoo "$@"
-        else
-            exec odoo "$@" "${DB_ARGS[@]}"
-        fi
+
+          exec /opt/odoo/odoo-server/odoo-bin "$@" "${DB_ARGS[@]}"
+
         ;;
     -*)
-        exec odoo "$@" "${DB_ARGS[@]}"
+        exec /opt/odoo/odoo-server/odoo-bin "$@" "${DB_ARGS[@]}"
         ;;
     *)
-        exec "$@"
+        exec /opt/odoo/odoo-server/odoo-bin "$@"
 esac
 
 exit 1

@@ -43,6 +43,8 @@ RUN set -x; \
 ################################ FINAL stage ##########################################################################
 FROM python:3-slim
 
+ENV LANG C.UTF-8
+
 COPY --from=build /pyhton-libs /usr/local
 
 COPY --from=build /opt/odoo /opt/odoo
@@ -106,5 +108,6 @@ ENV ODOO_RC /etc/odoo/odoo.conf
 # Set default user when running the container
 USER odoo
 
-#ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/opt/odoo/odoo-server/odoo-bin", "--config=/etc/odoo/odoo.conf", "--logfile=/var/log/odoo/odoo.log"]
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["/opt/odoo/odoo-server/odoo-bin"]

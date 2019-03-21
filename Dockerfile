@@ -109,4 +109,4 @@ ENV ODOO_RC /etc/odoo/odoo.conf
 USER root
 
 #ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/opt/odoo/odoo-server/odoo-bin --config=/etc/odoo/odoo.conf --logfile=/var/log/odoo/odoo-server.log"]
+CMD ["/opt/odoo/odoo-server/odoo-bin", "--config=/etc/odoo/odoo.conf", "--logfile=/var/log/odoo/odoo.log"]

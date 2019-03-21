@@ -30,14 +30,15 @@ WORKDIR /pyhton-libs
 RUN set -x; \
     curl -sO https://raw.githubusercontent.com/odoo/odoo/12.0/requirements.txt \
     && printf 'gdata\n python3-openid\n paramiko\n psycogreen\n pysftp\n pyyaml\n simplejson\n unittest2\n nameparser\n' >> requirements.txt \
-    && pip3 install --install-option="--prefix=/pyhton-libs" -r requirements.txt \
-    && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb \
+    && pip3 install --install-option="--prefix=/pyhton-libs" -r requirements.txt
+
+RUN set -x; \
+    curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb \
     && echo '7e35a63f9db14f93ec7feeb0fce76b30c08f2057 wkhtmltox.deb' | sha1sum -c - \
     && dpkg --force-depends -i wkhtmltox.deb\
     && apt-get update \
     && apt-get install -y -f --no-install-recommends
 
-RUN set -x; \
 
 ################################ FINAL stage ##########################################################################
 FROM python:3-slim

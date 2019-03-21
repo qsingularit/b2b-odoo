@@ -84,8 +84,6 @@ RUN set -x; \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf  /usr/share/doc/*
 
-RUN set -x; \
-    pip3 install tz;
 
 # Copy entrypoint script and Odoo configuration file
 COPY ./entrypoint.sh /

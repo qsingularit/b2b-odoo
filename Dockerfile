@@ -90,7 +90,7 @@ COPY ./entrypoint.sh /
 COPY ./odoo.conf /etc/odoo/odoo.conf
 RUN set -x; \
     chown -R odoo:odoo /etc/odoo/odoo.conf \
-    chmod -R 755 /etc/odoo/odoo.conf
+    && chmod -R 755 /etc/odoo/odoo.conf
 
 VOLUME ["/opt/odoo/custom/addons","/opt/odoo/b2b/addons"]
 

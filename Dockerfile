@@ -93,9 +93,7 @@ RUN set -x; \
 COPY ./entrypoint.sh /
 COPY ./odoo.conf /etc/odoo/odoo.conf
 
-RUN set -x; \
-    chown -R odoo:odoo /etc/odoo/odoo.conf \
-    && chmod -R 755 /etc/odoo/odoo.conf
+RUN chown -R odoo:odoo /etc/odoo/odoo.conf
 
 VOLUME ["/opt/odoo/custom/addons","/opt/odoo/b2b/addons"]
 
@@ -106,7 +104,7 @@ EXPOSE 8069 8071
 ENV ODOO_RC /etc/odoo/odoo.conf
 
 # Set default user when running the container
-USER root
+USER odoo
 
 #ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/opt/odoo/odoo-server/odoo-bin", "--config=/etc/odoo/odoo.conf", "--logfile=/var/log/odoo/odoo.log"]

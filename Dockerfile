@@ -35,7 +35,7 @@ RUN set -x; \
     && echo '7e35a63f9db14f93ec7feeb0fce76b30c08f2057 wkhtmltox.deb' | sha1sum -c - \
     && dpkg --force-depends -i wkhtmltox.deb\
     && apt-get update \
-    && apt-get install -f --no-install-recommends
+    && apt-get install -y -f --no-install-recommends
 
 RUN set -x; \
 
@@ -55,7 +55,7 @@ RUN set -x; \
     && gpgconf --kill all \
     && rm -rf "$GNUPGHOME" \
     && apt-get update  \
-    && apt-get install --no-install-recommends postgresql-client \
+    && apt-get install -y --no-install-recommends postgresql-client \
     && adduser --system --quiet --shell=/bin/bash --home=/opt/odoo --gecos 'ODOO' --group odoo \
 
 RUN set -x; \

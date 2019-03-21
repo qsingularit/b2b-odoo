@@ -49,7 +49,7 @@ COPY --from=build /opt/odoo /opt/odoo
 
 RUN set -x; \
     apt-get update \
-    && apt-get install -y gpg \
+    && apt-get install -y --no-install-recommends gpg libjpeg62-turbo libopenjp2-7 libxslt1.1 libtiff5  \
     && echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' > etc/apt/sources.list.d/pgdg.list \
     && export GNUPGHOME="$(mktemp -d)" \
     && repokey='B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8' \

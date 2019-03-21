@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ODOO_RC=/opt/odoo/odoo.conf
+ODOO_RC=/etc/odoo/odoo.conf
 
 set -e
 
